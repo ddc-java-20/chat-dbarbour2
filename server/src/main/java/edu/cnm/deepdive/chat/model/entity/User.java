@@ -1,16 +1,23 @@
 package edu.cnm.deepdive.chat.model.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.net.URL;
 import java.time.Instant;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -47,6 +54,10 @@ public class User {
   @Column(nullable = false, updatable = true, length = 30, unique = true)
   private String oathKey;
 
+  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+  @OrderBy("channel.name ASC, posted ASC")
+  private final List<Message> messages = new LinkedList<>();
+
   public long getId() {
     return id;
   }
@@ -81,6 +92,10 @@ public class User {
 
   public void setOathKey(String oathKey) {
     this.oathKey = oathKey;
+  }
+
+  public List<Message> getMessages() {
+    return messages;
   }
 
   @Override
