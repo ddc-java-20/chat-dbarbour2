@@ -29,7 +29,6 @@ import org.hibernate.annotations.CreationTimestamp;
         @Index(columnList = "joined")
     }
 )
-
 public class User {
 
   @Id
@@ -51,10 +50,10 @@ public class User {
   @Column(nullable = true, updatable = true)
   private URL avatar;
 
-  @Column(nullable = false, updatable = true, length = 30, unique = true)
-  private String oathKey;
+  @Column(nullable = false, updatable = false, length = 30, unique = true)
+  private String oauthKey;
 
-  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+  @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("channel.name ASC, posted ASC")
   private final List<Message> messages = new LinkedList<>();
 
@@ -86,12 +85,12 @@ public class User {
     this.avatar = avatar;
   }
 
-  public String getOathKey() {
-    return oathKey;
+  public String getOauthKey() {
+    return oauthKey;
   }
 
-  public void setOathKey(String oathKey) {
-    this.oathKey = oathKey;
+  public void setOauthKey(String oauthKey) {
+    this.oauthKey = oauthKey;
   }
 
   public List<Message> getMessages() {
@@ -106,16 +105,13 @@ public class User {
   @Override
   public boolean equals(Object obj) {
     boolean result;
-
-    if (obj==this) {
+    if (obj == this) {
       result = true;
-    } else if ((obj instanceof User other)) {
+    } else if (obj instanceof User other) {
       result = (id != 0 && id == other.id);
     } else {
       result = false;
     }
-
-
     return result;
   }
 
@@ -123,4 +119,5 @@ public class User {
   void generateFieldValues() {
     externalKey = UUID.randomUUID();
   }
+
 }
