@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 @AndroidEntryPoint
 public class HomeFragment extends Fragment implements MenuProvider {
 
-  public static final String TAG = "HomeFragment";
+  private static final String TAG = HomeFragment.class.getSimpleName();
 
   private FragmentHomeBinding binding;
   private LoginViewModel viewModel;
@@ -44,14 +44,14 @@ public class HomeFragment extends Fragment implements MenuProvider {
         .get(LoginViewModel.class);
     viewModel
         .getAccount()
-            .observe(getViewLifecycleOwner(), account -> {
-              if (account != null) {
-                Log.d(TAG, "Bearer " + account.getIdToken());
-              } else {
-                Navigation.findNavController(binding.getRoot())
-                    .navigate(HomeFragmentDirections.navigateToPreLoginFragment());
-              }
-            });
+        .observe(getViewLifecycleOwner(), (account) -> {
+          if (account != null) {
+            Log.d(TAG, "Bearer " + account.getIdToken());
+          } else {
+            Navigation.findNavController(binding.getRoot())
+                .navigate(HomeFragmentDirections.navigateToPreLoginFragment());
+          }
+        });
     requireActivity().addMenuProvider(this, getViewLifecycleOwner(), State.RESUMED);
   }
 
@@ -62,15 +62,14 @@ public class HomeFragment extends Fragment implements MenuProvider {
   }
 
   @Override
-  public void onCreateMenu(@NonNull Menu menu,
-      @NonNull MenuInflater menuInflater) {
-    menuInflater.inflate(R.menu.home_options,menu);
+  public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+    menuInflater.inflate(R.menu.home_options, menu);
   }
 
   @Override
-  public boolean onMenuItemSelected( @NotNull MenuItem menuItem) {
+  public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
     boolean handled = false;
-    if(menuItem.getItemId()==R.id.sign_out){
+    if (menuItem.getItemId() == R.id.sign_out) {
       viewModel.signOut();
       handled = true;
     }

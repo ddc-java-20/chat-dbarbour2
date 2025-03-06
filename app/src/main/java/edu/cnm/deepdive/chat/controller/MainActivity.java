@@ -11,7 +11,7 @@ import edu.cnm.deepdive.chat.R;
 import edu.cnm.deepdive.chat.databinding.ActivityMainBinding;
 
 @AndroidEntryPoint
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
   private ActivityMainBinding binding;
   private NavController navController;
@@ -32,9 +32,11 @@ public class MainActivity extends AppCompatActivity  {
 
   private void setupNavigation() {
     setSupportActionBar(binding.toolbar);
-    appBarConfig = new AppBarConfiguration.Builder(R.id.home_fragment, R.id.pre_login_fragment,
-        R.id.login_fragment).build();
-    navController = ((NavHostFragment) binding.navHostFragmentContainer.getFragment()).getNavController();
+    appBarConfig = new AppBarConfiguration.Builder(
+        R.id.home_fragment, R.id.pre_login_fragment, R.id.login_fragment
+    )
+        .build();
+    navController = ((NavHostFragment) binding.navHostContainer.getFragment()).getNavController();
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
   }
 
